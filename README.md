@@ -5,18 +5,18 @@ A modern and minimal quote discovery website designed to inspire users through m
 Quotify focuses on a clean, Apple-inspired design with smooth animations, beautiful typography, and a simple user experience.
 
 Features: <br>
-Display inspiring quotes <br>
+Display inspiring quotes <br> <br>
 Generate random quotes <br>
 Copy quotes with one click <br>
 Modern minimalist UI <br>
 Responsive design <br>
 Fast and lightweight <br>
 
-Built With:
-HTML5
-CSS3
-JavaScript
-Google Fonts (Inter)
+Built With: <br>
+HTML5 <br>
+CSS3 <br>
+JavaScript <br>
+Google Fonts (Inter) <br>
 
 📸 Preview
 
