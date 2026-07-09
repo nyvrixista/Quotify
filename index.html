@@ -1,7 +1,77 @@
 <html>
     <head>
-        <body>
-            
-        </body>
+        <meta charset = "UTF-8">
+        <meta name="viewport" content="width = device-width, initial-scale=1.0">
+
+        <title>Quotify</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
+        <link rel="stylesheet" href="style.css">
     </head>
+    
+    <body>
+        
+        <header>
+            <nav>
+                <h1>Quotify</h1>
+                      
+                <!-- Remember to create the html files underneath the href attribute for each link in the navigation bar. -->
+                <ul>
+                    <li><a href = "#">Home</a></li>
+                    <li><a href = "#">Categories</a></li>
+                    <li><a href = "#">Favorites</a></li>
+                    <li><a href = "#">About</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+
+            <section class = "hero">
+                <h2>Discover words that inspire.</h2>
+                <p>
+                    Read inspiring quotes from famous people, save your favorites, and brighten your day.
+                </p>
+            </section>
+
+            <section class = "quote-selection">
+                
+                <div class = "quote-card">
+                    
+                    <blockquote id = "quote">
+                        "The best way to get started is to quit talking and begin doing."
+                    </blockquote>
+
+                    <p id = "author">
+                        - Walt Disney
+                    </p>
+
+                </div>
+                
+                <div class = "buttons">
+                    
+                    <button id = "newQuoteBtn">
+                        New Quote
+                    </button>
+                   
+                    <button id = "copyQuoteBtn">
+                        Copy Quote
+                    </button>
+                
+                </div>
+            
+            </section>
+        
+        </main>
+        
+        <footer>
+            <p>&copy; 2026 Quotify. Created with ❤️ by Catalin Gavril!</p>
+        </footer>
+
+        <script src = "script.js"></script>
+
+    </body>
 </html>
