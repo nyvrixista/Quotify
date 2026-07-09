@@ -24,7 +24,7 @@ Google Fonts (Inter) <br>
 
 🌐 Live Demo
 
-<a href = "nyvrixista.github.io/Quotify">Click Here!</a>
+<a href = "https://nyvrixista.github.io/Quotify/">Click Here!</a>
 
 Purpose
 
