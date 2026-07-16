@@ -21,7 +21,7 @@ if (favorites.length === 0) {
             </p>
 
             <button class = "remove-btn">
-                🗑️ Remove
+                Remove
             </button>
         `;
 
