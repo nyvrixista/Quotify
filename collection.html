@@ -3,7 +3,7 @@
         <meta charset = "UTF-8">
         <meta name="viewport" content="width = device-width, initial-scale=1.0">
 
-        <title>Quotify</title>
+        <title>Your Collection</title>
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,35 +22,30 @@
                 <a href = "index.html" class = "logo">❝ Quotify</a>
                 <ul>
                     <li><a href = "index.html">Home</a></li>
-                    <li><a href = "categories.html">Categories</a></li>
-                    <li><a href = "favorites.html">Favorites</a></li>
+                    <li><a href = "collection.html">Collection</a></li>
+                    <li><a href = "achievements.html">Achievements</a></li>
                     <li><a href = "about.html">About</a></li>
                 </ul>
             </nav>
         </header>
 
         <main>
-            <section class = "hero">
-                <h1 id = "categoryTitle">Category</h1>
-                <p id = "categoryDescription">
-                    Explore quotes by topic and discover inspiration tailored to your interests.
-                </p>
-            </section>
-            <section id = "quotesList" class = "quotes-list">
+            <section class = "collection">
+                <h1>Your Collection</h1>
+                
+                <p id = "collectionProgress"></p>
 
-            </section>
-            <section class = "categories-grid">
-                <a href = "#" class="category-card">
-                    <h2>Motivation</h2>
-                    <br>
-                    <p>
-                        Stay inspired with quotes that encourage growth, perseverence, and determination.
-                    </p>
-                </a>
+                <div id = "collectionList"></div>
             </section>
         </main>
 
-        <script src = "quotes.js"></script>
-        <script src = "category.js"></script>
+        <footer>
+            <p>&copy; 2026 Quotify. Created with ❤️ by Catalin Gavril!</p>
+        </footer>
+     
+        <script src="quotes.js"></script>
+        <script src="collection.js"></script>
+
+
     </body>
 </html>

@@ -1,15 +1,19 @@
-let currentQuoteIndex = -1;
 let currentQuote = null;
 let discoveredQuotes = 
     JSON.parse(localStorage.getItem("discoveredQuotes")) || [];
+let unlockedAchievements = 
+    JSON.parse(localStorage.getItem("unlockedAchievements")) || []; 
+let toastShowing = false;
 
 const quoteText = document.getElementById("quote");
 const authorText = document.getElementById("author");
 const newQuoteBtn = document.getElementById("newQuoteBtn");
-const copyQuoteBtn = document.getElementById("copyQuoteBtn");
-const favoriteBtn = document.getElementById("favoriteBtn");
 const toast = document.getElementById("toast");
 const rarityText = document.getElementById("rarity");
+const quoteCard = document.getElementById("quoteCard");
+const toastQueue = [];
+
+const card_animation_time = 250;
 
 function rollRarity() {
     const roll = Math.random() * 100;
@@ -23,53 +27,94 @@ function rollRarity() {
     return "Mythic";
 }
 
-function generateQuote() {
-    
-    let rarity;
-    let availableQuotes = [];
-
-    do {
-        rarity = rollRarity();
-
-        availableQuotes = quotes.filter(
-            quote => quote.rarity === rarity
-        );
-
-        console.log("Found:", availableQuotes.length);
-
-    } while (availableQuotes.length === 0);
-    
-    let randomIndex;
-
-    do {
-        randomIndex = Math.floor(Math.random() * availableQuotes.length);
-    } while (
-        availableQuotes[randomIndex].text === currentQuote?.text &&
-        availableQuotes.length > 1
+function updateRarityStyle(rarity) {
+    quoteCard.classList.remove(
+        "common",
+        "uncommon",
+        "rare",
+        "epic",
+        "legendary",
+        "mythic"
     );
 
-    currentQuote = availableQuotes[randomIndex];
+    quoteCard.classList.add(rarity.toLowerCase());
+}
 
+function displayQuote() {
     quoteText.textContent = currentQuote.text;
     authorText.textContent = "— " + currentQuote.author;
 
     rarityText.textContent = currentQuote.rarity;
 
-    updateFavoriteButton();
+    updateRarityStyle(currentQuote.rarity);
     discoverQuote();
 }
 
-function copyQuote() {
-    
-    if (!currentQuote) {
-        alert("Generate a quote first!");
-        return;
+function revealQuote() {
+
+    if (currentQuote.rarity === "Legendary") {
+
+        quoteText.textContent = "🟠 LEGENDARY";
+        authorText.textContent = "";
+
+        setTimeout(() => {
+            displayQuote();
+        }, 700);
+
+    } 
+
+    else if (currentQuote.rarity === "Mythic") {
+
+        quoteText.textContent = "🌌 MYTHIC DISCOVERED";
+        authorText.textContent = "";
+
+        setTimeout(() => {
+            displayQuote();
+        }, 1200);
+
+    } 
+
+    else {
+        displayQuote();
     }
 
-    const textToCopy = `${quoteText.textContent} ${authorText.textContent}`;
-    navigator.clipboard.writeText(textToCopy);
+    quoteCard.classList.remove("opening");
+}
 
-    showToast("📋 Quote copied!")
+function generateQuote() {
+
+    quoteCard.classList.add("opening");
+
+    setTimeout(() => {
+
+        let rarity;
+        let availableQuotes = [];
+
+        do {
+            rarity = rollRarity();
+
+            availableQuotes = quotes.filter(
+                quote => quote.rarity === rarity
+            );
+
+        } while (availableQuotes.length === 0);
+
+        let randomIndex;
+
+        do {
+            randomIndex = Math.floor(Math.random() * availableQuotes.length);
+        } while (
+            availableQuotes[randomIndex].text === currentQuote?.text &&
+            availableQuotes.length > 1
+        );
+
+        currentQuote = availableQuotes[randomIndex];
+    
+        revealQuote();
+
+        quoteCard.classList.remove("opening");
+
+    }, card_animation_time);
 }
 
 function discoverQuote() {
@@ -85,58 +130,40 @@ function discoverQuote() {
         JSON.stringify(discoveredQuotes)
     );
 
-    showToast (`✨ New ${currentQuote.rarity} quote discovered!`)
-}
+    const unlocked = checkAchievements();
 
-function updateFavoriteButton() {
-    if (!currentQuote) {
-        favoriteBtn.textContent = "🤍 Save";
-        return;
+    if (!unlocked){
+        showToast (`✨ New ${currentQuote.rarity} quote discovered!`);
     }
-
-    const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-
-    const isFavorite = favorites.some(favorite =>
-        favorite.text === currentQuote.text &&
-        favorite.author === currentQuote.author
-    );
-
-    favoriteBtn.textContent = isFavorite ? "❤️ Saved" : "🤍 Save";
-}
-
-function toggleFavorite() {
-
-    if (!currentQuote) {
-        alert("Generate a quote first!");
-        return;
-    }
-
-    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-
-    const index = favorites.findIndex(favorite =>
-        favorite.text === currentQuote.text &&
-        favorite.author === currentQuote.author
-    );
-
-    if (index === -1) {
-        favorites.push(currentQuote);
-        showToast("❤️ Quote saved!");
-    } else {
-        favorites.splice(index, 1);
-        showToast("🗑️ Quote removed!");
-    }
-
-    localStorage.setItem("favorites", JSON.stringify(favorites));
-
-    updateFavoriteButton();
 }
 
 function showToast(message) {
-    toast.textContent = message;
+    toastQueue.push(message);
+
+    if (!toastShowing) {
+        displayNextToast();
+    }
+
+}
+
+function displayNextToast() {
+    if (toastQueue.length === 0) {
+        toastShowing = false;
+        return;
+    }
+
+    toastShowing = true;
+
+    toast.innerHTML = toastQueue.shift();
     toast.classList.add("show");
 
     setTimeout(() => {
         toast.classList.remove("show");
+
+        setTimeout(() => {
+            displayNextToast();
+        }, 250);
+    
     }, 2000);
 }
 
@@ -144,17 +171,73 @@ function getDiscoveryProgress() {
     return `${discoveredQuotes.length}/${quotes.length}`;
 }
 
-currentQuote = quotes[0];
+function checkAchievements() {
+    let unlockedSomething = false;
+
+    const discoveredCount = discoveredQuotes.length;
+
+    achievements.forEach(achievement => {
+        if (unlockedAchievements.includes(achievement.id)) {
+            return;
+        }
+
+        let unlocked = false;
+
+        switch (achievement.id) {
+            case "first_quote":
+                unlocked = discoveredCount >= 1;
+                break;
+
+            case "collector_10":
+                unlocked = discoveredCount >= 10;
+                break;
+            
+            case "collector_25":
+                unlocked = discoveredCount >= 25;
+                break;
+
+            case "collector_50":
+                unlocked = discoveredCount >= 50;
+                break;
+
+            case "completionist":
+                unlocked = discoveredCount === quotes.length;
+                break;
+
+            case "first_legendary":
+                unlocked = currentQuote.rarity === "Legendary";
+                break;
+
+            case "first_mythic":
+                unlocked = currentQuote.rarity === "Mythic";
+                break;
+
+        }
+
+        if (unlocked) {
+            unlockedSomething = true;
+
+            unlockedAchievements.push(achievement.id);
+
+            localStorage.setItem(
+                "unlockedAchievements",
+                JSON.stringify(unlockedAchievements)
+            );
+
+            showToast(`
+                <strong>🏆 Achievement Unlocked!</strong><br><br>
+                ${achievement.name}<br>
+                ${achievement.description}
+            `);
+        }
+    });
+
+    return unlockedSomething;
+}
+
+currentQuote = null;
 
 if (newQuoteBtn) {
     newQuoteBtn.addEventListener("click", generateQuote);
-}
-
-if (copyQuoteBtn) {
-    copyQuoteBtn.addEventListener("click", copyQuote);
-}
-
-if (favoriteBtn) {
-    favoriteBtn.addEventListener("click", toggleFavorite);
 }
 

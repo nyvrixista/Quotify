@@ -25,8 +25,8 @@
                 <!-- Remember to create the html files underneath the href attribute for each link in the navigation bar. -->
                 <ul>
                     <li><a href = "index.html">Home</a></li>
-                    <li><a href = "categories.html">Categories</a></li>
-                    <li><a href = "favorites.html">Favorites</a></li>
+                    <li><a href = "collection.html">Collection</a></li>
+                    <li><a href = "achievements.html">Achievements</a></li>
                     <li><a href = "about.html">About</a></li>
                 </ul>
             </nav>
@@ -36,12 +36,12 @@
 
             <section class = "hero">
                 <h1>Quotify</h1> <br>
-                <h2>Read. Reflect. Grow.</h2>
+                <h2>Read. Collect. Win.</h2>
             </section>
 
             <section class = "quote-selection">
                 
-                <div class = "quote-card">
+                <div class = "quote-card" id = "quoteCard">
                     
                     <blockquote id = "quote">
                         Search for the quotes here.
@@ -56,17 +56,9 @@
                 <div class = "buttons">
                     
                     <button id = "newQuoteBtn">
-                        New Quote
-                    </button>
-                   
-                    <button id = "copyQuoteBtn">
-                        Copy Quote
+                        Generate Quote
                     </button>
 
-                    <button id = "favoriteBtn">
-                        🤍 Save
-                    </button>
-                
                 </div>
             
             </section>
@@ -80,6 +72,7 @@
         <div id = "toast" class = "toast"></div>
 
         <script src = "quotes.js"></script>
+        <script src = "achievements.js"></script>
         <script src = "script.js"></script>
 
     </body>
